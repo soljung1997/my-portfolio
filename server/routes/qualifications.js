@@ -1,20 +1,22 @@
 import express from 'express';
 import {
+  createQualification,
   getQualifications,
   getQualificationById,
-  createQualification,
   updateQualification,
-  deleteQualification,
-  deleteAllQualifications,
-} from '../controllers/qualificationController.js';
+  deleteQualification
+} from '../controllers/qualification.controller.js';
+import authCtrl from '../controllers/auth.controller.js';
 
 const router = express.Router();
 
+// Public: view qualifications
 router.get('/', getQualifications);
 router.get('/:id', getQualificationById);
-router.post('/', createQualification);
-router.put('/:id', updateQualification);
-router.delete('/:id', deleteQualification);
-router.delete('/', deleteAllQualifications);
+
+// Admin-only
+router.post('/', authCtrl.requireSignin, authCtrl.isAdmin, createQualification);
+router.put('/:id', authCtrl.requireSignin, authCtrl.isAdmin, updateQualification);
+router.delete('/:id', authCtrl.requireSignin, authCtrl.isAdmin, deleteQualification);
 
 export default router;
