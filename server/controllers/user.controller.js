@@ -46,3 +46,12 @@ export const userByID = async (req, res, next, id) => {
     return res.status(400).json({ error: 'Could not retrieve user' });
   }
 };
+
+// Internal use for /me route
+export const getUserByIdInternal = async (id) => {
+  try {
+    return await User.findById(id).select('-hashed_password -salt'); // Hide sensitive fields
+  } catch {
+    return null;
+  }
+};

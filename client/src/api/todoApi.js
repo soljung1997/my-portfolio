@@ -1,7 +1,7 @@
 // Fetch all todos
 export const getTodos = async (token) => {
   try {
-    const res = await fetch('/api/todos', {
+    const res = await fetch('http://localhost:5000/todos', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -16,7 +16,7 @@ export const getTodos = async (token) => {
 // Fetch one todo
 export const getTodoById = async (id, token) => {
   try {
-    const res = await fetch(`/api/todos/${id}`, {
+    const res = await fetch(`http://localhost:5000/todos/${id}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -31,7 +31,7 @@ export const getTodoById = async (id, token) => {
 // Update a todo
 export const updateTodo = async (id, updatedData, token) => {
   try {
-    const res = await fetch(`/api/todos/${id}`, {
+    const res = await fetch(`http://localhost:5000/todos/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export const updateTodo = async (id, updatedData, token) => {
 // Delete a todo
 export const deleteTodo = async (id, token) => {
   try {
-    const res = await fetch(`/api/todos/${id}`, {
+    const res = await fetch(`http://localhost:5000/todos/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`

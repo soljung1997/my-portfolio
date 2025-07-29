@@ -1,6 +1,7 @@
 // src/pages/AddTodo.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Forms.css'; 
 
 const AddTodo = () => {
   const [form, setForm] = useState({
@@ -47,7 +48,7 @@ const AddTodo = () => {
   };
 
   return (
-    <div>
+    <div className="form-container">
       <h2>Add Todo</h2>
       <form onSubmit={handleSubmit}>
         <input type="text" name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
@@ -60,6 +61,7 @@ const AddTodo = () => {
         </select>
         <button type="submit">Add Todo</button>
       </form>
+      <button onClick={() => navigate('/')}>Back to Home</button>
     </div>
   );
 };

@@ -1,17 +1,25 @@
 // server/db.js
 import mongoose from 'mongoose';
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('MongoDB connected');
-  } catch (err) {
-    console.error('MongoDB connection failed:', err.message);
+export default async function connectDB() {
+  const uri = process.env.MONGO_URI;
+  if (!uri) {
+    console.error('❌ MONGO_URI is missing in .env');
     process.exit(1);
   }
-};
 
-export default connectDB;
+  try {
+    // Mongoose 8: no need for useNewUrlParser / useUnifiedTopology
+    await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 10000, // 10s instead of hanging forever
+    });
+    console.log('✅ MongoDB connected');
+  } catch (err) {
+    console.error('❌ MongoDB connection failed:', err.message);
+    process.exit(1);
+  }
+
+  mongoose.connection.on('error', (err) => {
+    console.error('MongoDB runtime error:', err);
+  });
+}

@@ -1,0 +1,80 @@
+/* Add to Forms.css or TodoList.css */
+
+.todo-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  font-family: 'Inter', sans-serif;
+}
+
+.todo-container h2 {
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.todo-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  background-color: #fafafa;
+}
+
+.todo-text {
+  flex: 1;
+  font-weight: 500;
+  color: #111;
+}
+
+.todo-actions {
+  display: flex;
+  gap: 10px;
+  margin-left: 20px;
+}
+
+.todo-actions button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #000;
+  color: black;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.todo-actions button:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.back-button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #000;
+  background-color: transparent;
+  color: #000;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: #000;
+  color: #fff;
+}
