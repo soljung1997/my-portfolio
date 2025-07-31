@@ -1,5 +1,5 @@
 import express from 'express';
-import cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser'; // fixed typo: 'cookeParser'
 import compress from 'compression';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -16,21 +16,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compress());
-
-// ✅ CORS setup to allow Vercel frontend
-app.use(cors({
-  origin: 'https://my-portfolio-czuk-36iidnqam-solomons-projects-7c694625.vercel.app',
-  credentials: true,
-}));
-
+app.use(cors());
 app.use(helmet());
-
-// Authenticated routes
 app.use('/api/todos', authCtrl.requireSignin, todoRoutes);
 
 // Routes
-app.use('/api', authRoutes);
-app.use('/api', userRoutes);
+app.use('/', authRoutes);
+app.use('/', userRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -42,7 +34,7 @@ app.use((err, req, res, next) => {
   }
 });
 
-// Health check
 app.get('/health', (req, res) => res.json({ ok: true }));
+
 
 export default app;
