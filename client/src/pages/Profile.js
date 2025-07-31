@@ -9,7 +9,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await api.get('/me');
+        const res = await api.get('/users/me');
         setUser(res.data);
       } catch (err) {
         setError(err.response?.data?.error || 'Failed to fetch user');

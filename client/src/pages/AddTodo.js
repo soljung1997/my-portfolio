@@ -28,7 +28,7 @@ const AddTodo = () => {
     }
 
     try {
-      const res = await api.post('/api/todos', form, {
+      const res = await api.post('/todos', form, {
         headers: {
           Authorization: `Bearer ${token}`
         }
