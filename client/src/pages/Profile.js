@@ -8,13 +8,22 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Not logged in');
+        return;
+      }
+
       try {
-        const res = await api.get('/users/me');
+        const res = await api.get('/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setUser(res.data);
       } catch (err) {
         setError(err.response?.data?.error || 'Failed to fetch user');
       }
     };
+
     fetchUser();
   }, []);
 
