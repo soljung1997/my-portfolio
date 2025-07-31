@@ -1,23 +1,24 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
-import './Home.css'; // We'll add this CSS next
+import './Home.css';
 
 const Home = () => {
   const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem("token"); // Simple login check
 
   return (
-    <>
-      <div className="home-container">
-        <img src="/logo.jpg" alt="Zentro Logo" className="zentro-logo" />
-        <h1>Welcome to Zentro</h1>
-        <p className="home-description">Manage your tasks. Stay focused. Simplify your day.</p>
+    <div className="home-container">
+      <img src="/logo.jpg" alt="Zentro Logo" className="zentro-logo" />
+      <h1>Welcome to Zentro</h1>
+      <p className="home-description">Manage your tasks. Stay focused. Simplify your day.</p>
+
+      {!isLoggedIn && (
         <div className="home-buttons">
-          <button onClick={() => navigate('/signup')}>Sign Up</button>
-          <button onClick={() => navigate('/signin')}>Sign In</button>
+          <button onClick={() => navigate('/register')}>Sign Up</button>
+          <button onClick={() => navigate('/login')}>Sign In</button>
         </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 };
 
