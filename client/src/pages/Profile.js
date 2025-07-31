@@ -15,7 +15,7 @@ const Profile = () => {
       }
 
       try {
-        const res = await api.get('/me', {
+        const res = await api.get('/users/me', {
           headers: {
             Authorization: `Bearer ${token}`
           }
