@@ -21,8 +21,9 @@ app.use(helmet());
 app.use('/api/todos', authCtrl.requireSignin, todoRoutes);
 
 // Routes
-app.use('/', authRoutes);
-app.use('/', userRoutes);
+app.use('/api', authRoutes);
+app.use('/api', userRoutes);
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
