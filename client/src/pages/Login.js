@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import api from '../api'; // ✅ Import your Axios instance
 import './AuthForms.css';
 
 export default function Login() {
@@ -15,23 +16,13 @@ export default function Login() {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/users/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await api.post('/users/login', { email, password }); // ✅ Use Axios instance
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || 'Login failed');
-        return;
-      }
-
-      localStorage.setItem('token', data.token);
+      localStorage.setItem('token', res.data.token);
       navigate(from, { replace: true });
-    } catch {
-      setError('Error logging in');
+    } catch (err) {
+      const msg = err.response?.data?.error || 'Login failed';
+      setError(msg);
     }
   };
 

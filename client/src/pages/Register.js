@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import api from '../api'; // ✅ import Axios instance
 import './AuthForms.css';
 
 export default function Register() {
@@ -16,41 +17,32 @@ export default function Register() {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/users/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
+      // ✅ Register the user
+      const res = await api.post('/users/signup', {
+        name,
+        email,
+        password,
       });
 
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || 'Registration failed');
-        return;
-      }
-
-      if (data.token) {
-        localStorage.setItem('token', data.token);
+      // If signup returns token (auto-login)
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
         navigate(from, { replace: true });
         return;
       }
 
-      const loginRes = await fetch('http://localhost:5000/api/users/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      // Otherwise, try logging in manually
+      const loginRes = await api.post('/users/login', {
+        email,
+        password,
       });
 
-      const loginData = await loginRes.json();
-
-      if (!loginRes.ok) {
-        navigate('/login', { state: { from } });
-        return;
-      }
-
-      localStorage.setItem('token', loginData.token);
+      localStorage.setItem('token', loginRes.data.token);
       navigate(from, { replace: true });
+
     } catch (err) {
-      setError(err.message || 'Something went wrong');
+      const msg = err.response?.data?.error || 'Something went wrong';
+      setError(msg);
     }
   };
 
