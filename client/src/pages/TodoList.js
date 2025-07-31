@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './TodoList.css'; 
+import api from '../api/axios';
+import './TodoList.css';
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
@@ -22,27 +23,24 @@ const TodoList = () => {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/todos', {
+      const res = await api.get('/api/todos', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to fetch todos');
-      setTodos(data);
+      setTodos(res.data);
     } catch (err) {
-      setError(err.message);
+      const msg = err.response?.data?.error || 'Failed to fetch todos';
+      setError(msg);
     }
   };
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/todos/${id}`, {
-        method: 'DELETE',
+      await api.delete(`/api/todos/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      if (!res.ok) throw new Error('Delete failed');
-      await fetchTodos(); // refresh list
-    } catch (err) {
+      await fetchTodos();
+    } catch {
       setError('Delete failed');
     }
   };
@@ -55,18 +53,14 @@ const TodoList = () => {
   const handleUpdate = async (id) => {
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/todos/${id}`, {
-        method: 'PUT',
+      await api.put(`/api/todos/${id}`, editForm, {
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(editForm)
+        }
       });
-      if (!res.ok) throw new Error('Update failed');
       setEditingTodoId(null);
-      await fetchTodos(); // refresh list
-    } catch (err) {
+      await fetchTodos();
+    } catch {
       setError('Update failed');
     }
   };
@@ -127,7 +121,6 @@ const TodoList = () => {
       <button onClick={() => navigate('/')} className="back-button">Back to Home</button>
     </div>
   );
-
 };
 
 export default TodoList;

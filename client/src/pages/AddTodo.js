@@ -1,7 +1,8 @@
 // src/pages/AddTodo.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Forms.css'; 
+import api from '../api/axios'; // ✅ Use custom Axios instance
+import './Forms.css';
 
 const AddTodo = () => {
   const [form, setForm] = useState({
@@ -19,8 +20,7 @@ const AddTodo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token'); // ✅ match key
-
+    const token = localStorage.getItem('token');
 
     if (!token) {
       alert('You must be logged in to add a todo.');
@@ -28,22 +28,17 @@ const AddTodo = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/todos', {
-        method: 'POST',
+      const res = await api.post('/api/todos', form, {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(form)
+          Authorization: `Bearer ${token}`
+        }
       });
 
-      const data = await response.json();
-
-      if (!response.ok) throw new Error(data.error || 'Failed to add todo');
       alert('Todo added successfully!');
-      navigate('/todos');  // redirect to the list page after adding
+      navigate('/todos');
     } catch (err) {
-      alert(err.message);
+      const msg = err.response?.data?.error || 'Failed to add todo';
+      alert(msg);
     }
   };
 

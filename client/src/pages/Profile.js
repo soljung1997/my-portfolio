@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import api from '../api/axios';
 import './Profile.css';
 
 const Profile = () => {
@@ -14,16 +15,13 @@ const Profile = () => {
       }
 
       try {
-        const res = await fetch('http://localhost:5000/me', {
-            headers: { Authorization: `Bearer ${token}` }
+        const res = await api.get('/me', {
+          headers: { Authorization: `Bearer ${token}` }
         });
-
-
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to fetch user');
-        setUser(data);
+        setUser(res.data);
       } catch (err) {
-        setError(err.message);
+        const msg = err.response?.data?.error || 'Failed to fetch user';
+        setError(msg);
       }
     };
 
