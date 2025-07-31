@@ -22,7 +22,8 @@ app.use('/api/todos', authCtrl.requireSignin, todoRoutes);
 
 // Routes
 app.use('/', authRoutes);
-app.use('/', userRoutes);
+app.use('/api/users', userRoutes); // ✅ puts /me at /api/users/me
+
 
 
 // Error handling middleware
