@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api/axios';
+import api from '../api/axios'; // ✅ use your axios instance
 import './TodoList.css';
 
 const TodoList = () => {
@@ -16,29 +16,17 @@ const TodoList = () => {
   }, []);
 
   const fetchTodos = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setError('Not logged in');
-      return;
-    }
-
     try {
-      const res = await api.get('/api/todos', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await api.get('/todos');
       setTodos(res.data);
     } catch (err) {
-      const msg = err.response?.data?.error || 'Failed to fetch todos';
-      setError(msg);
+      setError(err.response?.data?.error || 'Failed to fetch todos');
     }
   };
 
   const handleDelete = async (id) => {
-    const token = localStorage.getItem('token');
     try {
-      await api.delete(`/api/todos/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.delete(`/todos/${id}`);
       await fetchTodos();
     } catch {
       setError('Delete failed');
@@ -51,13 +39,8 @@ const TodoList = () => {
   };
 
   const handleUpdate = async (id) => {
-    const token = localStorage.getItem('token');
     try {
-      await api.put(`/api/todos/${id}`, editForm, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      await api.put(`/todos/${id}`, editForm);
       setEditingTodoId(null);
       await fetchTodos();
     } catch {
@@ -83,23 +66,11 @@ const TodoList = () => {
             <li className="todo-item" key={todo._id}>
               {editingTodoId === todo._id ? (
                 <div style={{ flex: 1 }}>
-                  <input
-                    name="title"
-                    value={editForm.title}
-                    onChange={handleEditChange}
-                    placeholder="Title"
-                  />
-                  <input
-                    name="description"
-                    value={editForm.description}
-                    onChange={handleEditChange}
-                    placeholder="Description"
-                  />
+                  <input name="title" value={editForm.title} onChange={handleEditChange} />
+                  <input name="description" value={editForm.description} onChange={handleEditChange} />
                 </div>
               ) : (
-                <div className="todo-text">
-                  {todo.title} — {todo.description}
-                </div>
+                <div className="todo-text">{todo.title} — {todo.description}</div>
               )}
               <div className="todo-actions">
                 {editingTodoId === todo._id ? (
@@ -118,7 +89,7 @@ const TodoList = () => {
           ))}
         </ul>
       )}
-      <button onClick={() => navigate('/')} className="back-button">Back to Home</button>
+      <button onClick={() => navigate('/')}>Back to Home</button>
     </div>
   );
 };
