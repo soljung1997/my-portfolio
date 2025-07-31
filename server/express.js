@@ -24,6 +24,17 @@ app.use('/api/todos', authCtrl.requireSignin, todoRoutes);
 app.use('/', authRoutes);
 app.use('/', userRoutes);
 
+app.get('/api/me', authCtrl.requireSignin, async (req, res) => {
+  try {
+    const user = await import('./controllers/user.controller.js').then(m => m.getUserByIdInternal(req.auth._id));
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to get profile' });
+  }
+});
+
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
