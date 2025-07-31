@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import api from '../api'; // ✅ Import your Axios instance
+import api from '../api/axios';
 import './AuthForms.css';
 
 export default function Login() {
