@@ -12,6 +12,8 @@ const Home = () => {
       <img src="/logo.jpg" alt="Zentro Logo" className="zentro-logo" />
       <h1>Welcome to Zentro</h1>
       <p className="home-description">Manage your tasks. Stay focused. Simplify your day.</p>
+      <p>This is a CI/CD test update — Jee Won Jung</p>
+
 
       {!isLoggedIn && (
         <div className="home-buttons">
